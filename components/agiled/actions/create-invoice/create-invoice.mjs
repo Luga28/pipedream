@@ -39,13 +39,9 @@ export default {
       ],
     },
     recurringPayment: {
-      type: "string",
+      type: "boolean",
       label: "Recurring Payment",
       description: "If its a recurring profile or not",
-      options: [
-        "yes",
-        "no",
-      ],
     },
     discountType: {
       type: "string",
@@ -116,6 +112,14 @@ export default {
     },
   },
   methods: {
+    boolToString(value) {
+      if (!value) {
+        return;
+      }
+      return value
+        ? "yes"
+        : "no";
+    },
     createInvoice(args = {}) {
       return this.app.post({
         path: "/invoices",
@@ -186,6 +190,7 @@ export default {
   },
   async run({ $ }) {
     const {
+      boolToString,
       numberOfItems,
       itemsPropsMapper,
       createInvoice,
@@ -215,7 +220,7 @@ export default {
         discount_type: discountType,
         discount,
         currency_id: currencyId,
-        recurring_payment: recurringPayment,
+        recurring_payment: boolToString(recurringPayment),
         billing_frequency: billingFrequency,
         billing_interval: billingInterval,
         billing_cycle: billingCycle,
