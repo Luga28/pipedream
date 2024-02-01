@@ -1,0 +1,20 @@
+//function to calculate the sale rate of a expense charge
+function saleRate(service, margin, min){
+    var charges = dbx.Context.CurrentObject.Charges
+    var amount = 0
+
+    if(charges){
+        dbx.using(charges)
+        .iterate(function (charge) {
+            if(charge.ChargeDefinition.Description == service){
+                amount = charge.Amount
+                return false
+            }          
+            
+        });
+    }
+
+    if(amount == 0){return 0}
+    return Math.max((amount*(1+margin)),(amount+min))
+
+}
